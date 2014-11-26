@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to set up a Django project on Vagrant.
+# Script to set up a Django project on arahsor.
 
 # Installation settings
 
@@ -9,8 +9,8 @@ PROJECT_NAME=$1
 DB_NAME=$PROJECT_NAME
 VIRTUALENV_NAME=$PROJECT_NAME
 
-PROJECT_DIR=/home/vagrant/$PROJECT_NAME
-VIRTUALENV_DIR=/home/vagrant/.virtualenvs/$PROJECT_NAME
+PROJECT_DIR=/home/arahsor/$PROJECT_NAME
+VIRTUALENV_DIR=/home/arahsor/.virtualenvs/$PROJECT_NAME
 
 PGSQL_VERSION=9.1
 
@@ -52,8 +52,8 @@ pip install virtualenv virtualenvwrapper stevedore virtualenv-clone
 
 
 # bash environment global setup
-cp -p $PROJECT_DIR/etc/install/bashrc /home/vagrant/.bashrc
-su - vagrant -c "mkdir -p /home/vagrant/.pip_download_cache"
+cp -p $PROJECT_DIR/etc/install/bashrc /home/arahsor/.bashrc
+su - arahsor -c "mkdir -p /home/arahsor/.pip_download_cache"
 
 # ---
 
@@ -74,14 +74,14 @@ createdb -Upostgres $DB_NAME
 apt-get install -y libxml2-dev libxslt-dev
 
 # virtualenv setup for project
-su - vagrant -c "/usr/local/bin/virtualenv $VIRTUALENV_DIR && \
+su - arahsor -c "/usr/local/bin/virtualenv $VIRTUALENV_DIR && \
     echo $PROJECT_DIR > $VIRTUALENV_DIR/.project && \
-    PIP_DOWNLOAD_CACHE=/home/vagrant/.pip_download_cache $VIRTUALENV_DIR/bin/pip install -r $PROJECT_DIR/requirements/dev.txt"
+    PIP_DOWNLOAD_CACHE=/home/arahsor/.pip_download_cache $VIRTUALENV_DIR/bin/pip install -r $PROJECT_DIR/requirements/dev.txt"
 
-echo "workon $VIRTUALENV_NAME" >> /home/vagrant/.bashrc
+echo "workon $VIRTUALENV_NAME" >> /home/arahsor/.bashrc
 
 # Set execute permissions on manage.py, as they get lost if we build from a zip file
 chmod a+x $PROJECT_DIR/manage.py
 
 # Django project setup
-su - vagrant -c "source $VIRTUALENV_DIR/bin/activate && cd $PROJECT_DIR && python manage.py syncdb --noinput && python manage.py migrate --noinput"
+su - arahsor -c "source $VIRTUALENV_DIR/bin/activate && cd $PROJECT_DIR && python manage.py syncdb --noinput && python manage.py migrate --noinput"
